@@ -1,0 +1,22 @@
+<%
+  url = pago.persisted? ? admin_pago_path(pago) : admin_factura_pagos_path(pago.factura)
+%>
+<%= form_with model: pago, url: url, class: "tarjeta" do |f| %>
+  <%= render "admin/shared/errores", objeto: pago %>
+
+  <div class="campo">
+    <%= f.label :monto %>
+    <%= f.number_field :monto, step: 0.01, min: 0, required: true %>
+  </div>
+  <div class="campo">
+    <%= f.label :fecha %>
+    <%= f.date_field :fecha, required: true %>
+  </div>
+  <div class="campo">
+    <%= f.label :medio_de_pago_id %>
+    <%= f.collection_select :medio_de_pago_id, medios_de_pago, :id, :nombre,
+                            { prompt: "Elegí un medio de pago" }, required: true %>
+  </div>
+
+  <%= f.submit %>
+<% end %>

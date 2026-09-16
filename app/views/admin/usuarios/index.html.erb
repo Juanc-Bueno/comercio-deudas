@@ -1,0 +1,30 @@
+<% content_for :title, "Usuarios" %>
+
+<div class="encabezado">
+  <h1>Usuarios</h1>
+  <%= link_to "Nuevo usuario", new_admin_usuario_path, class: "boton" %>
+</div>
+
+<table>
+  <thead>
+    <tr><th>Nombre</th><th>Email</th><th>Rol</th><th class="num">Pagos</th><th></th></tr>
+  </thead>
+  <tbody>
+    <% @usuarios.each do |usuario| %>
+      <tr>
+        <td><%= usuario.nombre %></td>
+        <td><%= usuario.email %></td>
+        <td><%= t("roles.#{usuario.rol}") %></td>
+        <td class="num"><%= usuario.pagos.count %></td>
+        <td class="acciones">
+          <%= link_to "Editar", edit_admin_usuario_path(usuario) %>
+          <% unless usuario == usuario_actual %>
+            <%= button_to "Eliminar", admin_usuario_path(usuario), method: :delete,
+                          form: { class: "inline" }, class: "boton boton--secundario",
+                          data: { turbo_confirm: "¿Eliminar este usuario?" } %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

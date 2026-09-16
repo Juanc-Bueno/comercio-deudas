@@ -1,0 +1,31 @@
+<% content_for :title, "Medios de pago" %>
+
+<div class="encabezado">
+  <h1>Medios de pago</h1>
+  <%= link_to "Nuevo medio de pago", new_admin_medio_de_pago_path, class: "boton" %>
+</div>
+
+<% if @medios_de_pago.any? %>
+  <table>
+    <thead>
+      <tr><th>Nombre</th><th>Estado</th><th class="num">Pagos</th><th></th></tr>
+    </thead>
+    <tbody>
+      <% @medios_de_pago.each do |medio| %>
+        <tr>
+          <td><%= medio.nombre %></td>
+          <td><%= medio.activo? ? "Activo" : "Inactivo" %></td>
+          <td class="num"><%= medio.pagos.count %></td>
+          <td class="acciones">
+            <%= link_to "Editar", edit_admin_medio_de_pago_path(medio) %>
+            <%= button_to "Eliminar", admin_medio_de_pago_path(medio), method: :delete,
+                          form: { class: "inline" }, class: "boton boton--secundario",
+                          data: { turbo_confirm: "¿Eliminar este medio de pago?" } %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p class="vacio">Todavía no hay medios de pago cargados.</p>
+<% end %>

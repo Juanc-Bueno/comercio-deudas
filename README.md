@@ -99,14 +99,28 @@ Requisitos: Ruby 3.3.10 (la versión está fijada en `.ruby-version`) y SQLite 3
 git clone <URL-del-repositorio>
 cd comercio_deudas
 bundle install
-bin/rails db:prepare    # crea la base y corre las migraciones
+bin/rails db:prepare    # crea la base, migra y carga los datos de ejemplo
 bin/rails server        # http://localhost:3000
 ```
+
+La raíz redirige al back-office: <http://localhost:3000/admin>
+
+### Acceso al back-office
+
+`db/seeds.rb` crea dos usuarios, uno por cada contexto de uso:
+
+| Rol | Email | Contraseña | Acceso |
+| --- | --- | --- | --- |
+| Administrador | `admin@petshop.test` | `admin12345` | Back-office en `/admin` |
+| Operador | `operador@petshop.test` | `operador12345` | Solo API (no entra al back-office) |
+
+También carga cuatro medios de pago, tres proveedores y cuatro facturas de ejemplo, una
+por cada estado posible (pendiente, parcial, pagada y vencida).
 
 ### Base de datos
 
 La aplicación usa SQLite, con los archivos en `storage/` (no se versionan). Para
-recrearla desde cero:
+recrearla desde cero, incluyendo los datos de ejemplo:
 
 ```bash
 bin/rails db:reset
@@ -126,11 +140,11 @@ Implementado:
 
 - Migraciones, modelos, relaciones y validaciones de las cinco entidades, con las reglas
   de negocio de saldo, estado y tope de pago.
+- Back-office en `/admin` con autenticación por sesión, autorización por rol y CRUD de
+  proveedores, facturas, pagos, medios de pago y usuarios.
 
 Pendiente:
 
-- Back-office en `/admin` con autenticación y CRUD (incluye las credenciales de acceso y
-  los datos de ejemplo en `db/seeds.rb`).
 - API JSON versionada en `/api/v1` con login por token.
 - Active Storage: comprobante adjunto a la factura.
 - Action Mailer: aviso de factura próxima a vencer.

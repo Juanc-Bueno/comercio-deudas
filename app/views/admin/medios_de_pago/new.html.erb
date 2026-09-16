@@ -1,0 +1,8 @@
+<% content_for :title, "Nuevo medio de pago" %>
+
+<div class="encabezado">
+  <h1>Nuevo medio de pago</h1>
+  <%= link_to "Volver", admin_medios_de_pago_path %>
+</div>
+
+<%= render "form", medio_de_pago: @medio_de_pago %>

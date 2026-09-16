@@ -1,0 +1,8 @@
+<% content_for :title, "Nueva factura" %>
+
+<div class="encabezado">
+  <h1>Nueva factura</h1>
+  <%= link_to "Volver", admin_facturas_path %>
+</div>
+
+<%= render "form", factura: @factura, proveedores: @proveedores %>

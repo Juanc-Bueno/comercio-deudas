@@ -1,0 +1,72 @@
+es:
+  estados:
+    pendiente: Pendiente
+    parcial: Parcial
+    pagada: Pagada
+    vencida: Vencida
+
+  roles:
+    admin: Administrador
+    operador: Operador
+
+  number:
+    currency:
+      format:
+        unit: "$"
+        format: "%u %n"
+        delimiter: "."
+        separator: ","
+        precision: 2
+
+  helpers:
+    submit:
+      create: "Crear %{model}"
+      update: "Guardar cambios"
+      submit: "Guardar %{model}"
+
+  activerecord:
+    models:
+      proveedor:
+        one: Proveedor
+        other: Proveedores
+      factura:
+        one: Factura
+        other: Facturas
+      pago:
+        one: Pago
+        other: Pagos
+      medio_de_pago:
+        one: Medio de pago
+        other: Medios de pago
+      usuario:
+        one: Usuario
+        other: Usuarios
+    attributes:
+      proveedor:
+        nombre: Nombre
+        cuit: CUIT
+        email: Email
+        telefono: Teléfono
+        direccion: Dirección
+        activo: Activo
+      factura:
+        proveedor: Proveedor
+        numero: Número
+        fecha_emision: Fecha de emisión
+        fecha_vencimiento: Fecha de vencimiento
+        total: Total
+      pago:
+        factura: Factura
+        medio_de_pago: Medio de pago
+        usuario: Registrado por
+        monto: Monto
+        fecha: Fecha
+      medio_de_pago:
+        nombre: Nombre
+        activo: Activo
+      usuario:
+        nombre: Nombre
+        email: Email
+        rol: Rol
+        password: Contraseña
+        password_confirmation: Confirmación de contraseña

@@ -1,0 +1,55 @@
+<% content_for :title, @proveedor.nombre %>
+
+<div class="encabezado">
+  <h1><%= @proveedor.nombre %></h1>
+  <span>
+    <%= link_to "Editar", edit_admin_proveedor_path(@proveedor), class: "boton" %>
+    <%= link_to "Nueva factura", new_admin_factura_path(proveedor_id: @proveedor.id), class: "boton" %>
+  </span>
+</div>
+
+<div class="datos">
+  <dl>
+    <dt>CUIT</dt><dd><%= @proveedor.cuit %></dd>
+    <dt>Email</dt><dd><%= @proveedor.email.presence || "—" %></dd>
+    <dt>Teléfono</dt><dd><%= @proveedor.telefono.presence || "—" %></dd>
+    <dt>Dirección</dt><dd><%= @proveedor.direccion.presence || "—" %></dd>
+    <dt>Estado</dt><dd><%= @proveedor.activo? ? "Activo" : "Inactivo" %></dd>
+    <dt>Deuda total</dt><dd><strong><%= number_to_currency(@proveedor.saldo_total) %></strong></dd>
+  </dl>
+</div>
+
+<h2>Facturas</h2>
+
+<% if @facturas.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>Número</th>
+        <th>Vencimiento</th>
+        <th class="num">Total</th>
+        <th class="num">Saldo</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @facturas.each do |factura| %>
+        <tr>
+          <td><%= link_to factura.numero, admin_factura_path(factura) %></td>
+          <td><%= l factura.fecha_vencimiento %></td>
+          <td class="num"><%= number_to_currency(factura.total) %></td>
+          <td class="num"><%= number_to_currency(factura.saldo) %></td>
+          <td><span class="estado estado--<%= factura.estado %>"><%= t("estados.#{factura.estado}") %></span></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p class="vacio">Este proveedor no tiene facturas cargadas.</p>
+<% end %>
+
+<h2>Eliminar</h2>
+<p class="vacio">Solo se puede eliminar un proveedor que no tenga facturas.</p>
+<%= button_to "Eliminar proveedor", admin_proveedor_path(@proveedor), method: :delete,
+              form: { class: "inline" }, class: "boton boton--secundario",
+              data: { turbo_confirm: "¿Eliminar este proveedor?" } %>

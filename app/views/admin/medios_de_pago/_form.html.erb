@@ -1,0 +1,14 @@
+<%= form_with model: [ :admin, medio_de_pago ], class: "tarjeta" do |f| %>
+  <%= render "admin/shared/errores", objeto: medio_de_pago %>
+
+  <div class="campo">
+    <%= f.label :nombre %>
+    <%= f.text_field :nombre, required: true %>
+  </div>
+  <div class="campo campo--check">
+    <%= f.check_box :activo %>
+    <%= f.label :activo %>
+  </div>
+
+  <%= f.submit %>
+<% end %>

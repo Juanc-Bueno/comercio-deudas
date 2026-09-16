@@ -1,0 +1,27 @@
+<%= form_with model: [ :admin, factura ], class: "tarjeta" do |f| %>
+  <%= render "admin/shared/errores", objeto: factura %>
+
+  <div class="campo">
+    <%= f.label :proveedor_id %>
+    <%= f.collection_select :proveedor_id, proveedores, :id, :nombre,
+                            { prompt: "Elegí un proveedor" }, required: true %>
+  </div>
+  <div class="campo">
+    <%= f.label :numero %>
+    <%= f.text_field :numero, required: true, placeholder: "0001-00000123" %>
+  </div>
+  <div class="campo">
+    <%= f.label :fecha_emision %>
+    <%= f.date_field :fecha_emision, required: true %>
+  </div>
+  <div class="campo">
+    <%= f.label :fecha_vencimiento %>
+    <%= f.date_field :fecha_vencimiento, required: true %>
+  </div>
+  <div class="campo">
+    <%= f.label :total %>
+    <%= f.number_field :total, step: 0.01, min: 0, required: true %>
+  </div>
+
+  <%= f.submit %>
+<% end %>

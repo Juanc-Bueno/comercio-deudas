@@ -12,6 +12,6 @@ class Proveedor < ApplicationRecord
   scope :activos, -> { where(activo: true) }
 
   def saldo_total
-    facturas.sum(&:saldo)
+    facturas.sum(:total) - Pago.where(factura: facturas).sum(:monto)
   end
 end

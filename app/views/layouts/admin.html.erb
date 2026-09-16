@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <title><%= content_for(:title) || "Back-office" %> · Comercio Deudas</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+    <% if usuario_actual %>
+      <header class="barra">
+        <strong><%= link_to "Comercio Deudas", admin_root_path %></strong>
+        <nav>
+          <%= link_to "Facturas", admin_facturas_path %>
+          <%= link_to "Proveedores", admin_proveedores_path %>
+          <%= link_to "Medios de pago", admin_medios_de_pago_path %>
+          <%= link_to "Usuarios", admin_usuarios_path %>
+        </nav>
+        <span class="sesion">
+          <%= usuario_actual.nombre %>
+          <%= button_to "Cerrar sesión", admin_session_path, method: :delete,
+                        form: { class: "inline" }, class: "boton boton--secundario" %>
+        </span>
+      </header>
+    <% end %>
+
+    <main>
+      <% if flash[:notice] %>
+        <p class="aviso aviso--ok"><%= flash[:notice] %></p>
+      <% end %>
+      <% if flash[:alert] %>
+        <p class="aviso aviso--error"><%= flash[:alert] %></p>
+      <% end %>
+
+      <%= yield %>
+    </main>
+  </body>
+</html>

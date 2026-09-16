@@ -1,10 +1,125 @@
-/*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
- */
+:root {
+  --texto: #1f2328;
+  --suave: #6a737d;
+  --borde: #d9dde1;
+  --fondo: #f6f7f8;
+  --acento: #1f6feb;
+  --peligro: #b3261e;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--fondo);
+  color: var(--texto);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+a { color: var(--acento); }
+
+.barra {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.7rem 1.5rem;
+  background: #fff;
+  border-bottom: 1px solid var(--borde);
+}
+
+.barra nav { display: flex; gap: 1.1rem; margin-right: auto; }
+.barra a { text-decoration: none; }
+.barra .sesion { display: flex; align-items: center; gap: 0.75rem; color: var(--suave); font-size: 0.9rem; }
+
+main { max-width: 68rem; margin: 0 auto; padding: 1.5rem; }
+
+.encabezado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+h1 { font-size: 1.35rem; margin: 0; }
+h2 { font-size: 1.05rem; margin: 1.75rem 0 0.6rem; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+}
+
+th, td { padding: 0.55rem 0.75rem; text-align: left; border-bottom: 1px solid var(--borde); }
+th { background: #fafbfc; font-weight: 600; font-size: 0.85rem; color: var(--suave); }
+tbody tr:last-child td { border-bottom: 0; }
+th.num, td.num { text-align: right; font-variant-numeric: tabular-nums; }
+td.acciones { text-align: right; white-space: nowrap; }
+td.acciones > * { margin-left: 0.5rem; }
+
+.tarjeta, .datos {
+  background: #fff;
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  padding: 1.15rem 1.25rem;
+}
+
+.tarjeta { max-width: 34rem; }
+.datos dl { display: grid; grid-template-columns: 11rem 1fr; gap: 0.35rem 1rem; margin: 0; }
+.datos dt { color: var(--suave); }
+.datos dd { margin: 0; }
+
+.campo { display: flex; flex-direction: column; gap: 0.25rem; margin-bottom: 0.9rem; }
+.campo label { font-size: 0.85rem; color: var(--suave); }
+.campo--check { flex-direction: row; align-items: center; gap: 0.45rem; }
+
+input[type="text"], input[type="email"], input[type="password"],
+input[type="date"], input[type="number"], select {
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  background: #fff;
+  font: inherit;
+}
+
+input[type="submit"], .boton, button {
+  padding: 0.4rem 0.85rem;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: var(--acento);
+  color: #fff;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.boton--secundario { background: #fff; color: var(--peligro); border-color: var(--borde); }
+form.inline { display: inline; }
+
+.aviso { padding: 0.55rem 0.85rem; border-radius: 4px; margin-bottom: 1rem; }
+.aviso--ok { background: #e8f5e9; border: 1px solid #b6dbb9; }
+.aviso--error { background: #fdecea; border: 1px solid #f5c2bd; }
+
+.errores { background: #fdecea; border: 1px solid #f5c2bd; border-radius: 4px; padding: 0.7rem 0.9rem; margin-bottom: 1rem; }
+.errores p { margin: 0; }
+.errores ul { margin: 0.35rem 0 0 1.1rem; padding: 0; }
+
+.estado {
+  display: inline-block;
+  padding: 0.05rem 0.55rem;
+  border: 1px solid;
+  border-radius: 999px;
+  font-size: 0.8rem;
+}
+
+.estado--pendiente { background: #f2f4f6; border-color: #d8dde2; color: #445; }
+.estado--parcial { background: #fff6e0; border-color: #f0d79a; color: #7a5300; }
+.estado--pagada { background: #e8f5e9; border-color: #b6dbb9; color: #1e5b23; }
+.estado--vencida { background: #fdecea; border-color: #f5c2bd; color: #a02419; }
+
+.vacio { color: var(--suave); }
+.inactivo { color: var(--suave); font-size: 0.85rem; }

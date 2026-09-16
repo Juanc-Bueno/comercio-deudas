@@ -1,0 +1,29 @@
+<%= form_with model: [ :admin, usuario ], class: "tarjeta" do |f| %>
+  <%= render "admin/shared/errores", objeto: usuario %>
+
+  <div class="campo">
+    <%= f.label :nombre %>
+    <%= f.text_field :nombre, required: true %>
+  </div>
+  <div class="campo">
+    <%= f.label :email %>
+    <%= f.email_field :email, required: true %>
+  </div>
+  <div class="campo">
+    <%= f.label :rol %>
+    <%= f.select :rol, Usuario::ROLES.keys.map { |rol| [ t("roles.#{rol}"), rol ] } %>
+  </div>
+  <div class="campo">
+    <%= f.label :password %>
+    <%= f.password_field :password, autocomplete: "new-password" %>
+    <% if usuario.persisted? %>
+      <span class="inactivo">Dejalo en blanco para conservar la contraseña actual.</span>
+    <% end %>
+  </div>
+  <div class="campo">
+    <%= f.label :password_confirmation %>
+    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+  </div>
+
+  <%= f.submit %>
+<% end %>

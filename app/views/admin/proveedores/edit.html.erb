@@ -1,0 +1,8 @@
+<% content_for :title, "Editar proveedor" %>
+
+<div class="encabezado">
+  <h1>Editar proveedor</h1>
+  <%= link_to "Volver", admin_proveedor_path(@proveedor) %>
+</div>
+
+<%= render "form", proveedor: @proveedor %>

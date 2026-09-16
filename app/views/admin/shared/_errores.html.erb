@@ -1,0 +1,10 @@
+<% if objeto.errors.any? %>
+  <div class="errores">
+    <p><%= pluralize(objeto.errors.count, "error impidió", "errores impidieron") %> guardar los datos:</p>
+    <ul>
+      <% objeto.errors.full_messages.each do |mensaje| %>
+        <li><%= mensaje %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

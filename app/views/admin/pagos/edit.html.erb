@@ -1,0 +1,13 @@
+<% content_for :title, "Editar pago" %>
+
+<div class="encabezado">
+  <h1>Editar pago</h1>
+  <%= link_to "Volver", admin_factura_path(@pago.factura) %>
+</div>
+
+<p class="vacio">
+  Factura <%= @pago.factura.numero %> de <%= @pago.factura.proveedor.nombre %> ·
+  total <%= number_to_currency(@pago.factura.total) %>
+</p>
+
+<%= render "form", pago: @pago, medios_de_pago: @medios_de_pago %>

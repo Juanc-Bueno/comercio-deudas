@@ -4,7 +4,8 @@ class Usuario < ApplicationRecord
   has_many :pagos, dependent: :restrict_with_error
 
   # Los administradores usan el back-office; los operadores solo la API.
-  enum :rol, { operador: 0, admin: 1 }, default: :operador
+  ROLES = { operador: 0, admin: 1 }.freeze
+  enum :rol, ROLES, default: :operador
 
   normalizes :email, with: ->(email) { email.strip.downcase }
 

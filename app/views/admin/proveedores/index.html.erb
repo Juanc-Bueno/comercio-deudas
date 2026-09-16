@@ -1,0 +1,38 @@
+<% content_for :title, "Proveedores" %>
+
+<div class="encabezado">
+  <h1>Proveedores</h1>
+  <%= link_to "Nuevo proveedor", new_admin_proveedor_path, class: "boton" %>
+</div>
+
+<% if @proveedores.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>CUIT</th>
+        <th>Email</th>
+        <th>Teléfono</th>
+        <th class="num">Deuda</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @proveedores.each do |proveedor| %>
+        <tr>
+          <td>
+            <%= link_to proveedor.nombre, admin_proveedor_path(proveedor) %>
+            <% unless proveedor.activo? %><span class="inactivo">(inactivo)</span><% end %>
+          </td>
+          <td><%= proveedor.cuit %></td>
+          <td><%= proveedor.email %></td>
+          <td><%= proveedor.telefono %></td>
+          <td class="num"><%= number_to_currency(proveedor.saldo_total) %></td>
+          <td class="acciones"><%= link_to "Editar", edit_admin_proveedor_path(proveedor) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p class="vacio">Todavía no hay proveedores cargados.</p>
+<% end %>

@@ -1,0 +1,30 @@
+<%= form_with model: [ :admin, proveedor ], class: "tarjeta" do |f| %>
+  <%= render "admin/shared/errores", objeto: proveedor %>
+
+  <div class="campo">
+    <%= f.label :nombre %>
+    <%= f.text_field :nombre, required: true %>
+  </div>
+  <div class="campo">
+    <%= f.label :cuit %>
+    <%= f.text_field :cuit, required: true, placeholder: "30712345678" %>
+  </div>
+  <div class="campo">
+    <%= f.label :email %>
+    <%= f.email_field :email %>
+  </div>
+  <div class="campo">
+    <%= f.label :telefono %>
+    <%= f.text_field :telefono %>
+  </div>
+  <div class="campo">
+    <%= f.label :direccion %>
+    <%= f.text_field :direccion %>
+  </div>
+  <div class="campo campo--check">
+    <%= f.check_box :activo %>
+    <%= f.label :activo %>
+  </div>
+
+  <%= f.submit %>
+<% end %>

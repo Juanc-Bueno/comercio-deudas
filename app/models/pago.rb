@@ -13,11 +13,10 @@ class Pago < ApplicationRecord
   def monto_no_supera_saldo
     return if factura.blank? || monto.blank? || factura.total.blank?
 
-    # Al editar un pago ya guardado su propio monto sigue descontado del saldo,
-    # así que hay que devolverlo antes de comparar.
-    saldo_disponible = factura.saldo + (persisted? ? monto_in_database : 0)
+    # El tope se mide contra los demás pagos: al editar uno, su monto anterior no debe contarse.
+    pagado_por_otros = factura.pagos.where.not(id: id).sum(:monto)
 
-    if monto > saldo_disponible
+    if monto > factura.total - pagado_por_otros
       errors.add(:monto, "no puede superar el saldo pendiente de la factura")
     end
   end

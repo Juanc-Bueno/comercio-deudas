@@ -1,0 +1,65 @@
+<% content_for :title, "Factura #{@factura.numero}" %>
+
+<div class="encabezado">
+  <h1>Factura <%= @factura.numero %></h1>
+  <span>
+    <%= link_to "Editar", edit_admin_factura_path(@factura), class: "boton" %>
+    <% unless @factura.pagada? %>
+      <%= link_to "Registrar pago", new_admin_factura_pago_path(@factura), class: "boton" %>
+    <% end %>
+  </span>
+</div>
+
+<div class="datos">
+  <dl>
+    <dt>Proveedor</dt>
+    <dd><%= link_to @factura.proveedor.nombre, admin_proveedor_path(@factura.proveedor) %></dd>
+    <dt>Emisión</dt><dd><%= l @factura.fecha_emision %></dd>
+    <dt>Vencimiento</dt><dd><%= l @factura.fecha_vencimiento %></dd>
+    <dt>Total</dt><dd><%= number_to_currency(@factura.total) %></dd>
+    <dt>Pagado</dt><dd><%= number_to_currency(@factura.total_pagado) %></dd>
+    <dt>Saldo</dt><dd><strong><%= number_to_currency(@factura.saldo) %></strong></dd>
+    <dt>Estado</dt>
+    <dd><span class="estado estado--<%= @factura.estado %>"><%= t("estados.#{@factura.estado}") %></span></dd>
+  </dl>
+</div>
+
+<h2>Pagos</h2>
+
+<% if @pagos.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Medio de pago</th>
+        <th>Registrado por</th>
+        <th class="num">Monto</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @pagos.each do |pago| %>
+        <tr>
+          <td><%= l pago.fecha %></td>
+          <td><%= pago.medio_de_pago.nombre %></td>
+          <td><%= pago.usuario.nombre %></td>
+          <td class="num"><%= number_to_currency(pago.monto) %></td>
+          <td class="acciones">
+            <%= link_to "Editar", edit_admin_pago_path(pago) %>
+            <%= button_to "Eliminar", admin_pago_path(pago), method: :delete,
+                          form: { class: "inline" }, class: "boton boton--secundario",
+                          data: { turbo_confirm: "¿Eliminar este pago?" } %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p class="vacio">Esta factura todavía no tiene pagos registrados.</p>
+<% end %>
+
+<h2>Eliminar</h2>
+<p class="vacio">Al eliminar la factura también se borran sus pagos.</p>
+<%= button_to "Eliminar factura", admin_factura_path(@factura), method: :delete,
+              form: { class: "inline" }, class: "boton boton--secundario",
+              data: { turbo_confirm: "¿Eliminar la factura y sus pagos?" } %>

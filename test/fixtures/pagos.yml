@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  factura: one
+  medio_de_pago: one
+  monto: 9.99
+  fecha: 2026-09-14
+
+two:
+  factura: two
+  medio_de_pago: two
+  monto: 9.99
+  fecha: 2026-09-14

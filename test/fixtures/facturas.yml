@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  proveedor: one
+  numero: MyString
+  fecha_emision: 2026-09-14
+  fecha_vencimiento: 2026-09-14
+  total: 9.99
+
+two:
+  proveedor: two
+  numero: MyString
+  fecha_emision: 2026-09-14
+  fecha_vencimiento: 2026-09-14
+  total: 9.99

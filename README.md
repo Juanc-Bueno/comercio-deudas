@@ -197,6 +197,19 @@ bin/rubocop        # estilo (rubocop-rails-omakase)
 bin/brakeman       # análisis de seguridad
 ```
 
+Qué cubren los tests:
+
+- **Modelos** (`test/models`): el cálculo del saldo de cada factura y del saldo total por
+  proveedor; el estado derivado (pendiente, parcial, pagada, vencida); que un pago no
+  supere el saldo pendiente, incluso al editarlo; las validaciones de fechas (vencimiento y
+  pago no anteriores a la emisión); unicidad, formatos y normalizaciones; las restricciones
+  al eliminar; y el tipo y tamaño del comprobante.
+- **API** (`test/controllers/api/v1`): login y logout por token, rechazo sin token válido,
+  consulta de facturas, proveedores y medios de pago, y alta de pagos con su validación.
+- **Back-office** (`test/controllers/admin`): carga del comprobante de una factura.
+- **Aviso de vencimientos** (`test/mailers`, `test/tasks`): selección de las facturas a
+  avisar, contenido del mail y la tarea rake.
+
 ## Estado del proyecto
 
 Implementado:
@@ -208,7 +221,5 @@ Implementado:
 - API JSON versionada en `/api/v1` con login por token.
 - Active Storage: comprobante adjunto a la factura.
 - Action Mailer: aviso de factura próxima a vencer.
-
-Pendiente:
-
-- Tests automatizados de modelos, validaciones y cálculo de saldo.
+- Tests automatizados de modelos, validaciones y cálculo de saldo, más la API, el
+  comprobante y el aviso de vencimientos.

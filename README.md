@@ -117,6 +117,37 @@ La raíz redirige al back-office: <http://localhost:3000/admin>
 También carga cuatro medios de pago, tres proveedores y cuatro facturas de ejemplo, una
 por cada estado posible (pendiente, parcial, pagada y vencida).
 
+### API
+
+API JSON versionada en `/api/v1`, pensada para el front-end público (TP N.º 2). Cualquier
+usuario puede usarla: se obtiene un token con email y contraseña y se lo envía en cada
+request con el encabezado `Authorization: Bearer <token>`. Cada login emite un token nuevo
+e invalida el anterior; el logout también lo invalida.
+
+| Método | Ruta | Descripción |
+| --- | --- | --- |
+| `POST` | `/api/v1/session` | Login con `email` y `password`; devuelve el token y el usuario |
+| `DELETE` | `/api/v1/session` | Logout: invalida el token |
+| `GET` | `/api/v1/facturas` | Facturas con total pagado, saldo y estado, por fecha de vencimiento |
+| `GET` | `/api/v1/facturas/:id` | Una factura con sus pagos |
+| `POST` | `/api/v1/facturas/:factura_id/pagos` | Registra un pago (`pago[monto]`, `pago[fecha]`, `pago[medio_de_pago_id]`) |
+| `GET` | `/api/v1/proveedores` | Proveedores con su saldo total |
+| `GET` | `/api/v1/proveedores/:id` | Un proveedor con sus facturas |
+| `GET` | `/api/v1/medios_de_pago` | Medios de pago activos |
+
+```bash
+curl -X POST http://localhost:3000/api/v1/session \
+  -d email=operador@petshop.test -d password=operador12345
+# {"token":"…","usuario":{…}}
+
+curl http://localhost:3000/api/v1/facturas -H "Authorization: Bearer <token>"
+```
+
+Los importes (`total`, `saldo`, `monto`, etc.) se devuelven como string para no perder
+precisión decimal. Los errores responden con el código HTTP correspondiente: `401` sin token
+válido, `404` si el recurso no existe y `422` con `{"errores": {campo: [mensajes]}}` cuando
+un pago no pasa las validaciones (por ejemplo, si supera el saldo de la factura).
+
 ### Base de datos
 
 La aplicación usa SQLite, con los archivos en `storage/` (no se versionan). Para
@@ -142,10 +173,10 @@ Implementado:
   de negocio de saldo, estado y tope de pago.
 - Back-office en `/admin` con autenticación por sesión, autorización por rol y CRUD de
   proveedores, facturas, pagos, medios de pago y usuarios.
+- API JSON versionada en `/api/v1` con login por token.
 
 Pendiente:
 
-- API JSON versionada en `/api/v1` con login por token.
 - Active Storage: comprobante adjunto a la factura.
 - Action Mailer: aviso de factura próxima a vencer.
 - Tests automatizados de modelos, validaciones y cálculo de saldo.

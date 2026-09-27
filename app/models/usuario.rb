@@ -1,5 +1,6 @@
 class Usuario < ApplicationRecord
   has_secure_password
+  has_secure_token :token
 
   has_many :pagos, dependent: :restrict_with_error
 

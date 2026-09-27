@@ -13,3 +13,11 @@ module ActiveSupport
     # Add more helper methods to be used by all tests here...
   end
 end
+
+module ActionDispatch
+  class IntegrationTest
+    def con_token(usuario)
+      { "Authorization" => "Bearer #{usuario.token}" }
+    end
+  end
+end

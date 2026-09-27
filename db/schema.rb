@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_16_174045) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_27_222351) do
   create_table "facturas", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.date "fecha_emision", null: false
@@ -62,8 +62,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_16_174045) do
     t.string "nombre", null: false
     t.string "password_digest", null: false
     t.integer "rol", default: 0, null: false
+    t.string "token"
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_usuarios_on_email", unique: true
+    t.index ["token"], name: "index_usuarios_on_token", unique: true
   end
 
   add_foreign_key "facturas", "proveedores"

@@ -61,3 +61,4 @@ end
 
 puts "Listo. Proveedores: #{Proveedor.count}, facturas: #{Factura.count}, pagos: #{Pago.count}."
 puts "Back-office: admin@petshop.test / admin12345"
+puts "API: operador@petshop.test / operador12345"

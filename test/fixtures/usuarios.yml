@@ -3,9 +3,11 @@ admin:
   email: admin@petshop.test
   password_digest: <%= BCrypt::Password.create("admin12345") %>
   rol: admin
+  token: token-del-admin
 
 operador:
   nombre: Operador
   email: operador@petshop.test
   password_digest: <%= BCrypt::Password.create("operador12345") %>
   rol: operador
+  token: token-del-operador

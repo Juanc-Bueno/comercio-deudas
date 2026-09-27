@@ -1,6 +1,7 @@
 class Factura < ApplicationRecord
   TIPOS_DE_COMPROBANTE = %w[ application/pdf image/jpeg image/png ].freeze
   PESO_MAXIMO_DE_COMPROBANTE = 5.megabytes
+  DIAS_DE_AVISO = 3
 
   belongs_to :proveedor
   has_many :pagos, dependent: :destroy
@@ -14,6 +15,11 @@ class Factura < ApplicationRecord
   validates :total, numericality: { greater_than: 0 }
   validate :vencimiento_posterior_a_emision
   validate :comprobante_valido
+
+  # Fecha exacta y no un rango: el aviso se envía una vez por día, así cada factura se avisa una sola vez.
+  def self.proximas_a_vencer
+    where(fecha_vencimiento: Date.current + DIAS_DE_AVISO).includes(:proveedor).reject(&:pagada?)
+  end
 
   def total_pagado
     pagos.sum(:monto)

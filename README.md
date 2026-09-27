@@ -118,8 +118,9 @@ La raíz redirige al back-office: <http://localhost:3000/admin>
 | Administrador | `admin@petshop.test` | `admin12345` | Back-office en `/admin` |
 | Operador | `operador@petshop.test` | `operador12345` | Solo API (no entra al back-office) |
 
-También carga cuatro medios de pago, tres proveedores y cuatro facturas de ejemplo, una
-por cada estado posible (pendiente, parcial, pagada y vencida).
+También carga cuatro medios de pago, tres proveedores y cinco facturas de ejemplo: una
+por cada estado posible (pendiente, parcial, pagada y vencida) y otra que vence en 3 días,
+para probar el aviso de vencimiento.
 
 ### API
 
@@ -156,6 +157,29 @@ El comprobante de una factura se carga desde el back-office; la API lo expone en
 `comprobante_url` (o `null` si la factura no tiene), una URL de Active Storage desde la que
 se descarga el archivo.
 
+### Aviso de vencimientos
+
+Una tarea rake envía a todos los administradores un mail por cada factura impaga que vence
+dentro de exactamente 3 días, con su total, lo pagado, el saldo y un link a la factura en
+el back-office:
+
+```bash
+bin/rails facturas:avisar_vencimientos
+# Avisos enviados: 1
+```
+
+Está pensada para correr una vez por día, por ejemplo con cron. Como toma solo las
+facturas que vencen en exactamente 3 días, cada factura se avisa una sola vez:
+
+```cron
+0 8 * * * cd /ruta/a/comercio_deudas && RAILS_ENV=production bin/rails facturas:avisar_vencimientos
+```
+
+En desarrollo los mails no se envían: se guardan en `tmp/mails/`, un archivo por
+destinatario. También se pueden ver en <http://localhost:3000/rails/mailers>. El envío
+real por SMTP en producción no está configurado, porque el deploy queda fuera del alcance
+del TP.
+
 ### Base de datos
 
 La aplicación usa SQLite, con los archivos en `storage/` (no se versionan). Para
@@ -183,8 +207,8 @@ Implementado:
   proveedores, facturas, pagos, medios de pago y usuarios.
 - API JSON versionada en `/api/v1` con login por token.
 - Active Storage: comprobante adjunto a la factura.
+- Action Mailer: aviso de factura próxima a vencer.
 
 Pendiente:
 
-- Action Mailer: aviso de factura próxima a vencer.
 - Tests automatizados de modelos, validaciones y cálculo de saldo.

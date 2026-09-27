@@ -106,6 +106,26 @@ class FacturaTest < ActiveSupport::TestCase
     assert_equal "0002-00000400", nueva_factura(numero: "  0002-00000400 ").numero
   end
 
+  test "próximas a vencer incluye las impagas que vencen dentro de los días de aviso" do
+    factura = facturas(:parcial)
+    factura.update!(fecha_vencimiento: Date.current + Factura::DIAS_DE_AVISO)
+
+    assert_equal [ factura ], Factura.proximas_a_vencer
+  end
+
+  test "próximas a vencer excluye las facturas pagadas" do
+    facturas(:pagada).update!(fecha_vencimiento: Date.current + Factura::DIAS_DE_AVISO)
+
+    assert_empty Factura.proximas_a_vencer
+  end
+
+  test "próximas a vencer solo incluye el día exacto del aviso" do
+    facturas(:pendiente).update!(fecha_vencimiento: Date.current + Factura::DIAS_DE_AVISO - 1)
+    facturas(:parcial).update!(fecha_vencimiento: Date.current + Factura::DIAS_DE_AVISO + 1)
+
+    assert_empty Factura.proximas_a_vencer
+  end
+
   test "acepta un comprobante en PDF" do
     factura = nueva_factura
     factura.comprobante.attach(io: file_fixture("comprobante.pdf").open, filename: "comprobante.pdf")

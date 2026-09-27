@@ -1,0 +1,14 @@
+<p>Hola,</p>
+
+<p>
+  La factura <strong><%= @factura.numero %></strong> de <%= @factura.proveedor.nombre %>
+  vence el <strong><%= l @factura.fecha_vencimiento %></strong> y todavía tiene saldo pendiente.
+</p>
+
+<table>
+  <tr><td>Total</td><td><%= number_to_currency(@factura.total) %></td></tr>
+  <tr><td>Pagado</td><td><%= number_to_currency(@factura.total_pagado) %></td></tr>
+  <tr><td><strong>Saldo pendiente</strong></td><td><strong><%= number_to_currency(@factura.saldo) %></strong></td></tr>
+</table>
+
+<p><%= link_to "Ver la factura en el back-office", admin_factura_url(@factura) %></p>

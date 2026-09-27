@@ -47,6 +47,13 @@ Factura.find_or_create_by!(proveedor: proveedores.third, numero: "0003-00001204"
   factura.total = 42_300
 end
 
+# Para probar el aviso: bin/rails facturas:avisar_vencimientos
+Factura.find_or_create_by!(proveedor: proveedores.second, numero: "0002-00000345") do |factura|
+  factura.fecha_emision = Date.current - 27
+  factura.fecha_vencimiento = Date.current + Factura::DIAS_DE_AVISO
+  factura.total = 58_750
+end
+
 if parcial.pagos.empty?
   parcial.pagos.create!(medio_de_pago: transferencia, usuario: admin,
                         monto: 90_000, fecha: Date.current - 12)

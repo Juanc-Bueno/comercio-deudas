@@ -7,7 +7,7 @@ module Api
 
       def show
         @proveedor = Proveedor.find(params[:id])
-        @facturas = @proveedor.facturas.order(fecha_vencimiento: :asc)
+        @facturas = @proveedor.facturas.with_attached_comprobante.order(fecha_vencimiento: :asc)
       end
     end
   end

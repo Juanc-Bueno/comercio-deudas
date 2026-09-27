@@ -21,6 +21,15 @@
     <dt>Saldo</dt><dd><strong><%= number_to_currency(@factura.saldo) %></strong></dd>
     <dt>Estado</dt>
     <dd><span class="estado estado--<%= @factura.estado %>"><%= t("estados.#{@factura.estado}") %></span></dd>
+    <dt>Comprobante</dt>
+    <dd>
+      <% if @factura.comprobante.attached? %>
+        <%= link_to @factura.comprobante.filename, rails_blob_path(@factura.comprobante, disposition: "inline"),
+                    target: "_blank", rel: "noopener" %>
+      <% else %>
+        Sin comprobante
+      <% end %>
+    </dd>
   </dl>
 </div>
 

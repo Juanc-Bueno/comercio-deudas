@@ -54,7 +54,7 @@ module Admin
     end
 
     def factura_params
-      params.expect(factura: [ :proveedor_id, :numero, :fecha_emision, :fecha_vencimiento, :total ])
+      params.expect(factura: [ :proveedor_id, :numero, :fecha_emision, :fecha_vencimiento, :total, :comprobante ])
     end
   end
 end

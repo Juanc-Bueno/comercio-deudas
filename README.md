@@ -31,7 +31,8 @@ Cinco entidades principales:
 
 - **Proveedor** — a quién se le debe. Identificado por CUIT (único).
 - **Factura** — un comprobante emitido por un proveedor, con fecha de emisión, fecha de
-  vencimiento y total. Su número es único por proveedor.
+  vencimiento y total. Su número es único por proveedor. Puede tener adjunto el archivo
+  del comprobante (PDF o foto), guardado con Active Storage.
 - **Pago** — una imputación de dinero contra una factura, con su medio de pago y el
   usuario que la registró.
 - **MedioDePago** — efectivo, transferencia, cheque, etc.
@@ -53,6 +54,7 @@ classDiagram
     date fecha_emision
     date fecha_vencimiento
     decimal total
+    attachment comprobante
     saldo()
     estado()
   }
@@ -88,6 +90,8 @@ Están implementadas en los modelos, no en las vistas:
 - Un pago **no puede superar el saldo pendiente** de su factura, ni tener fecha anterior a
   la emisión de la misma.
 - La fecha de vencimiento de una factura no puede ser anterior a su emisión.
+- El comprobante adjunto de una factura debe ser un PDF o una imagen JPG o PNG de hasta
+  5 MB.
 - No se puede eliminar un proveedor con facturas, ni un medio de pago o un usuario con
   pagos asociados.
 
@@ -128,7 +132,7 @@ e invalida el anterior; el logout también lo invalida.
 | --- | --- | --- |
 | `POST` | `/api/v1/session` | Login con `email` y `password`; devuelve el token y el usuario |
 | `DELETE` | `/api/v1/session` | Logout: invalida el token |
-| `GET` | `/api/v1/facturas` | Facturas con total pagado, saldo y estado, por fecha de vencimiento |
+| `GET` | `/api/v1/facturas` | Facturas con total pagado, saldo, estado y URL del comprobante, por fecha de vencimiento |
 | `GET` | `/api/v1/facturas/:id` | Una factura con sus pagos |
 | `POST` | `/api/v1/facturas/:factura_id/pagos` | Registra un pago (`pago[monto]`, `pago[fecha]`, `pago[medio_de_pago_id]`) |
 | `GET` | `/api/v1/proveedores` | Proveedores con su saldo total |
@@ -147,6 +151,10 @@ Los importes (`total`, `saldo`, `monto`, etc.) se devuelven como string para no 
 precisión decimal. Los errores responden con el código HTTP correspondiente: `401` sin token
 válido, `404` si el recurso no existe y `422` con `{"errores": {campo: [mensajes]}}` cuando
 un pago no pasa las validaciones (por ejemplo, si supera el saldo de la factura).
+
+El comprobante de una factura se carga desde el back-office; la API lo expone en
+`comprobante_url` (o `null` si la factura no tiene), una URL de Active Storage desde la que
+se descarga el archivo.
 
 ### Base de datos
 
@@ -174,9 +182,9 @@ Implementado:
 - Back-office en `/admin` con autenticación por sesión, autorización por rol y CRUD de
   proveedores, facturas, pagos, medios de pago y usuarios.
 - API JSON versionada en `/api/v1` con login por token.
+- Active Storage: comprobante adjunto a la factura.
 
 Pendiente:
 
-- Active Storage: comprobante adjunto a la factura.
 - Action Mailer: aviso de factura próxima a vencer.
 - Tests automatizados de modelos, validaciones y cálculo de saldo.

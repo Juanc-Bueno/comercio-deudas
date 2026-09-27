@@ -55,6 +55,7 @@ es:
         fecha_emision: Fecha de emisión
         fecha_vencimiento: Fecha de vencimiento
         total: Total
+        comprobante: Comprobante
       pago:
         factura: Factura
         medio_de_pago: Medio de pago

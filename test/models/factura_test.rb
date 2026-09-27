@@ -106,6 +106,31 @@ class FacturaTest < ActiveSupport::TestCase
     assert_equal "0002-00000400", nueva_factura(numero: "  0002-00000400 ").numero
   end
 
+  test "acepta un comprobante en PDF" do
+    factura = nueva_factura
+    factura.comprobante.attach(io: file_fixture("comprobante.pdf").open, filename: "comprobante.pdf")
+
+    assert_equal "application/pdf", factura.comprobante.content_type
+    assert factura.valid?
+  end
+
+  test "rechaza un comprobante que no es PDF ni imagen" do
+    factura = nueva_factura
+    factura.comprobante.attach(io: StringIO.new("texto plano"), filename: "notas.txt", content_type: "text/plain")
+
+    assert_not factura.valid?
+    assert_includes factura.errors[:comprobante], "debe ser un PDF o una imagen JPG o PNG"
+  end
+
+  test "rechaza un comprobante de más de 5 MB" do
+    factura = nueva_factura
+    contenido = "%PDF-1.4\n" + "0" * Factura::PESO_MAXIMO_DE_COMPROBANTE
+    factura.comprobante.attach(io: StringIO.new(contenido), filename: "grande.pdf", content_type: "application/pdf")
+
+    assert_not factura.valid?
+    assert_includes factura.errors[:comprobante], "no puede pesar más de 5 MB"
+  end
+
   test "al eliminarla se eliminan sus pagos" do
     assert_difference("Pago.count", -2) do
       facturas(:pagada).destroy

@@ -30,6 +30,16 @@ class Api::V1::FacturasControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal "pagada", response.parsed_body["estado"]
     assert_equal 2, response.parsed_body["pagos"].size
+    assert_nil response.parsed_body["comprobante_url"]
+  end
+
+  test "incluye la URL del comprobante cuando la factura tiene uno" do
+    factura = facturas(:pendiente)
+    factura.comprobante.attach(fixture_file_upload("comprobante.pdf", "application/pdf"))
+
+    get api_v1_factura_path(factura), headers: con_token(usuarios(:operador))
+
+    assert_match %r{/rails/active_storage/blobs/.+/comprobante\.pdf\z}, response.parsed_body["comprobante_url"]
   end
 
   test "una factura inexistente responde 404" do

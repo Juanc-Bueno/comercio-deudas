@@ -2,7 +2,7 @@ module Api
   module V1
     class FacturasController < BaseController
       def index
-        @facturas = Factura.includes(:proveedor).order(fecha_vencimiento: :asc)
+        @facturas = Factura.includes(:proveedor).with_attached_comprobante.order(fecha_vencimiento: :asc)
       end
 
       def show

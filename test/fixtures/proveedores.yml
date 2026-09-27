@@ -1,17 +1,17 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+alimentos:
+  nombre: Alimentos del Sur
+  cuit: "30712345678"
+  email: ventas@alimentosdelsur.test
+  telefono: 221 456-7890
+  activo: true
 
-one:
-  nombre: MyString
-  cuit: MyString
-  email: MyString
-  telefono: MyString
-  direccion: MyString
-  activo: false
+patitas:
+  nombre: Distribuidora Patitas
+  cuit: "30698765432"
+  email: pedidos@patitas.test
+  activo: true
 
-two:
-  nombre: MyString
-  cuit: MyString
-  email: MyString
-  telefono: MyString
-  direccion: MyString
+sin_facturas:
+  nombre: Veterinaria Mayorista
+  cuit: "27345678901"
   activo: false

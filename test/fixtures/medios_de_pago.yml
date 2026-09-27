@@ -1,9 +1,11 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+efectivo:
+  nombre: Efectivo
+  activo: true
 
-one:
-  nombre: MyString
-  activo: false
+transferencia:
+  nombre: Transferencia
+  activo: true
 
-two:
-  nombre: MyString
+cheque:
+  nombre: Cheque
   activo: false

@@ -1,11 +1,11 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+admin:
+  nombre: Administrador
+  email: admin@petshop.test
+  password_digest: <%= BCrypt::Password.create("admin12345") %>
+  rol: admin
 
-one:
-  nombre: MyString
-  email: MyString
-  password_digest: MyString
-
-two:
-  nombre: MyString
-  email: MyString
-  password_digest: MyString
+operador:
+  nombre: Operador
+  email: operador@petshop.test
+  password_digest: <%= BCrypt::Password.create("operador12345") %>
+  rol: operador

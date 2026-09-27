@@ -1,13 +1,20 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+parcial:
+  factura: parcial
+  medio_de_pago: transferencia
+  usuario: admin
+  monto: 100000
+  fecha: <%= Date.current - 10 %>
 
-one:
-  factura: one
-  medio_de_pago: one
-  monto: 9.99
-  fecha: 2026-09-14
+pagada_primera:
+  factura: pagada
+  medio_de_pago: efectivo
+  usuario: operador
+  monto: 40000
+  fecha: <%= Date.current - 30 %>
 
-two:
-  factura: two
-  medio_de_pago: two
-  monto: 9.99
-  fecha: 2026-09-14
+pagada_segunda:
+  factura: pagada
+  medio_de_pago: transferencia
+  usuario: admin
+  monto: 50000
+  fecha: <%= Date.current - 10 %>

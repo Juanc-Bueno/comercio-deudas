@@ -1,15 +1,27 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+pendiente:
+  proveedor: alimentos
+  numero: "0001-00000060"
+  fecha_emision: <%= Date.current - 5 %>
+  fecha_vencimiento: <%= Date.current + 25 %>
+  total: 100000
 
-one:
-  proveedor: one
-  numero: MyString
-  fecha_emision: 2026-09-14
-  fecha_vencimiento: 2026-09-14
-  total: 9.99
+parcial:
+  proveedor: alimentos
+  numero: "0001-00000052"
+  fecha_emision: <%= Date.current - 20 %>
+  fecha_vencimiento: <%= Date.current + 10 %>
+  total: 240000
 
-two:
-  proveedor: two
-  numero: MyString
-  fecha_emision: 2026-09-14
-  fecha_vencimiento: 2026-09-14
-  total: 9.99
+pagada:
+  proveedor: patitas
+  numero: "0002-00000310"
+  fecha_emision: <%= Date.current - 35 %>
+  fecha_vencimiento: <%= Date.current - 5 %>
+  total: 90000
+
+vencida:
+  proveedor: alimentos
+  numero: "0001-00000045"
+  fecha_emision: <%= Date.current - 50 %>
+  fecha_vencimiento: <%= Date.current - 5 %>
+  total: 185000

@@ -100,8 +100,8 @@ Están implementadas en los modelos, no en las vistas:
 Requisitos: Ruby 3.3.10 (la versión está fijada en `.ruby-version`) y SQLite 3.8+.
 
 ```bash
-git clone <URL-del-repositorio>
-cd comercio_deudas
+git clone https://github.com/Juanc-Bueno/comercio-deudas.git
+cd comercio-deudas
 bundle install
 bin/rails db:prepare    # crea la base, migra y carga los datos de ejemplo
 bin/rails server        # http://localhost:3000
@@ -147,6 +147,11 @@ curl -X POST http://localhost:3000/api/v1/session \
 
 curl http://localhost:3000/api/v1/facturas -H "Authorization: Bearer <token>"
 ```
+
+En [`docs/comercio_deudas.postman_collection.json`](docs/comercio_deudas.postman_collection.json)
+hay una colección de Postman con todos los endpoints y sus casos de error. Al importarla y
+ejecutarla en orden, el login guarda el token y las consultas guardan los ids que usan los
+requests siguientes.
 
 Los importes (`total`, `saldo`, `monto`, etc.) se devuelven como string para no perder
 precisión decimal. Los errores responden con el código HTTP correspondiente: `401` sin token

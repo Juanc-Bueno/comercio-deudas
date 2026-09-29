@@ -1,0 +1,350 @@
+{
+  "info": {
+    "name": "Comercio Deudas API",
+    "description": "API v1 de Comercio Deudas. Correr primero `bin/rails db:reset` y `bin/rails server`.\n\nEl login guarda el token en la variable `token` y las consultas guardan los ids que usan los requests siguientes, así que conviene ejecutarlos en orden (o con el Collection Runner).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{token}}", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:3000/api/v1" },
+    { "key": "email", "value": "operador@petshop.test" },
+    { "key": "password", "value": "operador12345" },
+    { "key": "token", "value": "" },
+    { "key": "token_anterior", "value": "" },
+    { "key": "proveedor_id", "value": "1" },
+    { "key": "factura_id", "value": "1" },
+    { "key": "medio_de_pago_id", "value": "1" },
+    { "key": "hoy", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "1. Autenticación",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"201 Created\", () => pm.response.to.have.status(201));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"Devuelve un token\", () => pm.expect(body.token).to.be.a(\"string\"));",
+                  "pm.collectionVariables.set(\"token\", body.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}"
+            },
+            "url": "{{base_url}}/session"
+          }
+        },
+        {
+          "name": "Login con contraseña incorrecta (401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"401 Unauthorized\", () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"incorrecta\"\n}"
+            },
+            "url": "{{base_url}}/session"
+          }
+        },
+        {
+          "name": "Request sin token (401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"401 Unauthorized\", () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/facturas"
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Consultas",
+      "item": [
+        {
+          "name": "Medios de pago",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200 OK\", () => pm.response.to.have.status(200));",
+                  "const medios = pm.response.json();",
+                  "if (medios.length) pm.collectionVariables.set(\"medio_de_pago_id\", medios[0].id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/medios_de_pago"
+          }
+        },
+        {
+          "name": "Proveedores",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200 OK\", () => pm.response.to.have.status(200));",
+                  "const proveedores = pm.response.json();",
+                  "if (proveedores.length) pm.collectionVariables.set(\"proveedor_id\", proveedores[0].id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/proveedores"
+          }
+        },
+        {
+          "name": "Proveedor con sus facturas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200 OK\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/proveedores/{{proveedor_id}}"
+          }
+        },
+        {
+          "name": "Facturas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200 OK\", () => pm.response.to.have.status(200));",
+                  "const facturas = pm.response.json();",
+                  "// Una pendiente muestra mejor el pago: después de registrarlo pasa a \"parcial\".",
+                  "const factura = facturas.find(f => f.estado === \"pendiente\") || facturas.find(f => f.estado !== \"pagada\");",
+                  "if (factura) pm.collectionVariables.set(\"factura_id\", factura.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/facturas"
+          }
+        },
+        {
+          "name": "Factura con sus pagos",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"200 OK\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/facturas/{{factura_id}}"
+          }
+        },
+        {
+          "name": "Factura inexistente (404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"404 Not Found\", () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/facturas/999999"
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Pagos",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set(\"hoy\", new Date().toISOString().slice(0, 10));"
+            ]
+          }
+        }
+      ],
+      "item": [
+        {
+          "name": "Registrar pago (201)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"201 Created\", () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pago\": {\n    \"monto\": 1000,\n    \"fecha\": \"{{hoy}}\",\n    \"medio_de_pago_id\": \"{{medio_de_pago_id}}\"\n  }\n}"
+            },
+            "url": "{{base_url}}/facturas/{{factura_id}}/pagos"
+          }
+        },
+        {
+          "name": "Pago que supera el saldo (422)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"422 Unprocessable Content\", () => pm.response.to.have.status(422));",
+                  "pm.test(\"Informa el error en monto\", () => pm.expect(pm.response.json().errores).to.have.property(\"monto\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pago\": {\n    \"monto\": 999999999,\n    \"fecha\": \"{{hoy}}\",\n    \"medio_de_pago_id\": \"{{medio_de_pago_id}}\"\n  }\n}"
+            },
+            "url": "{{base_url}}/facturas/{{factura_id}}/pagos"
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Logout",
+      "item": [
+        {
+          "name": "Logout (204)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set(\"token_anterior\", pm.collectionVariables.get(\"token\"));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"204 No Content\", () => pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{base_url}}/session"
+          }
+        },
+        {
+          "name": "Token invalidado tras el logout (401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"401 Unauthorized\", () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                { "key": "token", "value": "{{token_anterior}}", "type": "string" }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/facturas"
+          }
+        }
+      ]
+    }
+  ]
+}

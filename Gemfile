@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 8.1.3", ">= 8.1.3.1"
+gem "rails", "~> 8.1.4"
 # json 3.0 quitó el hash de opciones posicional de JSON.parse, firma que Active Support 8.1.3
 # todavía usa al leer la cookie de sesión: con json 3.x toda request con sesión da error 500.
 gem "json", "< 3"

@@ -4,7 +4,7 @@ source "https://rubygems.org"
 gem "rails", "~> 8.1.3", ">= 8.1.3.1"
 # json 3.0 quitó el hash de opciones posicional de JSON.parse, firma que Active Support 8.1.3
 # todavía usa al leer la cookie de sesión: con json 3.x toda request con sesión da error 500.
-gem "json", "< 3"
+gem "json", "< 4"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use sqlite3 as the database for Active Record
